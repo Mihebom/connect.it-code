@@ -205,7 +205,17 @@ public sealed class GameBoard : MonoBehaviour
                                         .AsyncWaitForCompletion();
 
 
-                ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count;
+                if (matchedTiles.Count == 4)
+                {
+                    ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count * 2;
+
+                } else if(matchedTiles.Count == 5)
+                {
+                    ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count * 3;
+                } else
+                {
+                    ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count;
+                }
 
                 var upScaleSequence = DOTween.Sequence();
 
