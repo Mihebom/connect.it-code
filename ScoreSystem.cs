@@ -1,23 +1,22 @@
-
+using Mirror;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
-public sealed class ScoreSystem : MonoBehaviour
+public sealed class ScoreSystem : NetworkBehaviour
 {
-
     public static ScoreSystem instance { get; private set; }
 
-    private int _score;
+    [SyncVar] public int _score;
 
+    [SyncVar] public int _opponentScore;
 
     public int score
     {
-
         get => _score;
 
         set
         {
-
             if (_score == value) return;
 
             _score = value;
@@ -26,8 +25,24 @@ public sealed class ScoreSystem : MonoBehaviour
         }
     }
 
-    [SerializeField] private TextMeshProUGUI scoreText;
+    public int opponentScore
+    {
+        get => _opponentScore;
 
-    private void Awake() => instance = this;
- 
+        set
+        {
+            if (_opponentScore == value) return;
+
+            _opponentScore = value;
+
+            opponentScoreText.SetText($"Score = {_opponentScore}");
+        }
+    }
+
+    [SerializeField] public TextMeshProUGUI scoreText;
+
+    [SerializeField] public TextMeshProUGUI opponentScoreText;
+
+    public void Awake() => instance = this;
+
 }
