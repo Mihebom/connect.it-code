@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
@@ -48,12 +47,24 @@ public class GameBoard : NetworkBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     void Start()
     {
-        counters = Resources.LoadAll<Counter>("FranceBoardCounters/");
+        //Determines which country board is currently being played on and loads counters based on that country
+        if (this.gameObject.scene.name == "FranceBoard")
+        {
+            counters = Resources.LoadAll<Counter>("FranceBoardCounters/");
+        }
+        
+        if(this.gameObject.scene.name == "ChinaBoard")
+        {
+            counters = Resources.LoadAll<Counter>("ChinaBoardCounters/");
+           
+        }
 
         Instance = this;
 
+        //creates tiles that will hold each board counter
         tiles = new Tile[rows.Max(rowList => rowList.tiles.Length), rows.Length];
 
+        //populates each tile with a counter
         for (var i = 0; i < rowHeight; i++)
         {
             for (var j = 0; j < rowWidth; j++)
@@ -65,7 +76,7 @@ public class GameBoard : NetworkBehaviour
                 tile.y = i;
 
                 tile.counter = counters[Random.Range(0, counters.Length)];
-
+               
                 tiles[j, i] = tile;
             }
 
@@ -77,6 +88,8 @@ public class GameBoard : NetworkBehaviour
 
     #region Board Intearction
 
+
+    //This function takes in two tiles and switches their positions
     public async void Select(Tile tile)
     {
 
@@ -101,6 +114,8 @@ public class GameBoard : NetworkBehaviour
 
     }
 
+
+    //This method defines the swapping animations for each tiles, and rearranging their position in the 2D array
     public async Task Swap(Tile tile1, Tile tile2)
     {
 
@@ -128,6 +143,8 @@ public class GameBoard : NetworkBehaviour
 
     }
 
+
+    //checks whether the tiles match or not
     private bool canPop()
     {
         for (var y = 0; y < rowHeight; y++)
@@ -137,6 +154,9 @@ public class GameBoard : NetworkBehaviour
         return false;
     }
 
+
+
+    //If tiles are able to be matched, "pop" them and calculate a score for the users
     public async void pop()
     {
 
@@ -221,16 +241,22 @@ public class GameBoard : NetworkBehaviour
 
     #region Score Update
 
+
+    //Updates user server and client score on both player screens
     [Server]
     public void serverUpdateBoardScore()
     {
         rpcUpdateBoardScore();
     }
 
+
+
+    //Sends client score to server, and server score to client
     [ClientRpc]
     public void rpcUpdateBoardScore()
     {
         ScoreSystem.instance.opponentScoreText.SetText($"Score = {ScoreSystem.instance._opponentScore}");
+
         //Updates server score on client
         ScoreSystem.instance.scoreText.SetText($"Score = {ScoreSystem.instance._score}");
     }
@@ -238,6 +264,4 @@ public class GameBoard : NetworkBehaviour
     #endregion
 
 }
-
-
 
