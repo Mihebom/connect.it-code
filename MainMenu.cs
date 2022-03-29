@@ -5,25 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-  
+
   public void boardList()
     {
-
         SceneManager.LoadScene("BoardList");
-
     }
 
     public void leaderBoards()
     {
-
         SceneManager.LoadScene("LeaderBoard");
-
     }
     public void userProfiles()
     {
-
         SceneManager.LoadScene("PlayerProfile");
-
     }
 
   
@@ -35,5 +29,25 @@ public class MainMenu : MonoBehaviour
     public void userRegister()
     {
         SceneManager.LoadScene("UserRegister");
+    }
+
+    public void joinChat()
+    {
+        SceneManager.LoadScene("Join-HostChat");
+    }
+
+    public void toInventory()
+    {
+        SceneManager.LoadScene("userInventory");    
+    }
+
+    public void shop()
+    {
+        SceneManager.LoadScene("PlayerStore");
+    }
+
+    public void test()
+    {
+        SceneManager.LoadScene("LobbyMenu");
     }
 }
