@@ -6,7 +6,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Mirror;
 
-public class roundSystem : NetworkBehaviour
+
+public class RoundSystem : NetworkBehaviour
 {
 
     public TextMeshProUGUI roundDisplay;
@@ -85,13 +86,51 @@ public class roundSystem : NetworkBehaviour
 
             facts[4] = "There is only one time zone in China.";
 
-            facts[5] = "Ping Pong is China's National Sport";
+            facts[5] = "Ping Pong is China's National Sport.";
 
-            facts[6] = "Tea was discovered in China";
+            facts[6] = "Tea was discovered in China.";
         }
 
         #endregion
 
+        #region Nigeria Facts
+        if (this.gameObject.scene.name == "NigeriaBoard")
+        {
+            facts[0] = "Nigeria is a member of the British Commonwealth.";
+
+            facts[1] = "The name Nigeria is derived from Niger, which is the longest river in West Africa.";
+
+            facts[2] = "About 75% of the total population uses social media on a regular basis.";
+
+            facts[3] = "Lagos is the largest city, but it’s not the capital.";
+
+            facts[4] = "The movie industry is known as Nollywood.";
+
+            facts[5] = "Oil is one of the biggest exports of the country.";
+
+            facts[6] = "There are more than 250 Ethnic Groups in Nigeria.";
+        }
+        #endregion
+
+
+        #region Pakistan Facts
+        if (this.gameObject.scene.name == "PakistanBoard")
+        {
+            facts[0] = "Pakistan is the world's first Islamic country to attain nuclear power.";
+
+            facts[1] = "Sylvester Stallone’s Rambo III was shot in Pakistan.";
+
+            facts[2] = "Lassi and black tea with milk and sugar are the most common drinks.";
+
+            facts[3] = "Pakistan is the world’s fifth most populated country - after China, India, the USA and Indonesia.";
+
+            facts[4] = "Pakistan has the only fertile desert in the world – the Tharparkar desert – located in Sindh province.";
+
+            facts[5] = "Around 40% - almost half! - of the world’s footballs are hand-sewn in Sialkot in Pakistan.";
+
+            facts[6] = "In Pakistan, cars drive on the left side of the road as they do in the UK and Australia or neighbouring country India.";
+        }
+        #endregion
         timerDisplay.GetComponent<TextMeshProUGUI>().text = "00:" + remainingSeconds;
 
     }
@@ -181,7 +220,24 @@ public class roundSystem : NetworkBehaviour
             if (ScoreSystem.instance.score > ScoreSystem.instance.opponentScore)
             {
                 winningScore += ScoreSystem.instance.score; //updates current winning score for host 
-                instance.SubmitScore("France", winningScore);
+                if (this.gameObject.scene.name == "FranceBoard")
+                {
+                    instance.SubmitScore("France", winningScore);
+                } 
+                else if(this.gameObject.scene.name == "NigeriaBoard")
+                {
+                    instance.SubmitScore("Nigeria", winningScore);
+                }
+                else if (this.gameObject.scene.name == "PakistanBoard")
+                {
+                    instance.SubmitScore("Pakistan", winningScore);
+                }
+                else if (this.gameObject.scene.name == "ChinaBoard")
+                {
+                    instance.SubmitScore("China", winningScore);
+                }
+
+                
                 winnerorloser.SetText("You Win!!");
             }
             else
@@ -190,10 +246,12 @@ public class roundSystem : NetworkBehaviour
                 winnerorloser.SetText("You lose.");
             }
 
+            instance.awardPlayer();
+
         }
         else if (isServer && isClient && remainingSeconds <= 0 && madeTurnServer == 8)
         {
-            SceneManager.LoadScene("demoOver");
+            
         }
 
         clientRounds();
@@ -259,21 +317,38 @@ public class roundSystem : NetworkBehaviour
             if (ScoreSystem.instance.opponentScore > ScoreSystem.instance.score)
             {
                 winningScore += ScoreSystem.instance.opponentScore; //updates current winning score for client
-                instance.SubmitScore("France", winningScore);
+                if (this.gameObject.scene.name == "FranceBoard")
+                {
+                    instance.SubmitScore("France", winningScore);
+                }
+                else if (this.gameObject.scene.name == "NigeriaBoard")
+                {
+                    instance.SubmitScore("Nigeria", winningScore);
+                }
+                else if (this.gameObject.scene.name == "PakistanBoard")
+                {
+                    instance.SubmitScore("Pakistan", winningScore);
+                }
+                else if (this.gameObject.scene.name == "ChinaBoard")
+                {
+                    instance.SubmitScore("China", winningScore);
+                }
                 winnerorloser.SetText("You Win!!");
-
+                
             }
             else
             {
               
                 winnerorloser.SetText("You lose.");
-
+                
             }
+
+            instance.awardPlayer();
 
         }
         else if (isClientOnly && remainingSeconds <= 0 && madeTurnClient == 9 && madeTurnServer == 8)
         {
-            SceneManager.LoadScene("demoOver");
+          
         }
 
     }
@@ -328,6 +403,7 @@ public class roundSystem : NetworkBehaviour
     }
 
 }
+
 
 
 
