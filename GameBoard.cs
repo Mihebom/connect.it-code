@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
@@ -8,7 +9,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Mirror;
 using UnityEngine.UI;
-
+using PlayFab;
+using PlayFab.ClientModels;
 
 
 public class GameBoard : NetworkBehaviour
@@ -18,6 +20,9 @@ public class GameBoard : NetworkBehaviour
 
     public Row[] rows;
 
+    private string tes1t;
+
+    private string tes2t;
     public Tile[,] tiles { get; private set; }
 
     public int rowWidth => tiles.GetLength(0);
@@ -34,12 +39,36 @@ public class GameBoard : NetworkBehaviour
 
     public static Counter[] counters;
 
+    public TextMeshProUGUI playerS;
+    public TextMeshProUGUI playerSCountry;
+    public TextMeshProUGUI playerC;
+    public TextMeshProUGUI playerCCountry;
+    private string playerCountryInGameS;
+    private string playerCountryInGameC;
+    private string playFABID;
+
     public void Update()
     {
+        
+        
+
+        PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), getSUname, OnLoginFailure);
+        PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest(), getUname, OnLoginFailure);
         if (isServer && isClient)
         {
             serverUpdateBoardScore();
+            serverUpdateUserName();
+            
         }
+        else
+        {
+
+            clientUpdateBoardScore();
+            clientUpdateUname();
+            
+        }
+
+        
     }
 
     #region Board Creation
@@ -47,6 +76,8 @@ public class GameBoard : NetworkBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     void Start()
     {
+        getPlayerSCountry();
+        getPlayerCCountry();
         //Determines which country board is currently being played on and loads counters based on that country
         if (this.gameObject.scene.name == "FranceBoard")
         {
@@ -57,6 +88,16 @@ public class GameBoard : NetworkBehaviour
         {
             counters = Resources.LoadAll<Counter>("ChinaBoardCounters/");
            
+        }
+
+        if(this.gameObject.scene.name == "NigeriaBoard")
+        {
+            counters = Resources.LoadAll<Counter>("NigeriaBoardCounters/");
+        }
+
+        if(this.gameObject.scene.name == "PakistanBoard")
+        {
+            counters = Resources.LoadAll<Counter>("PakistanBoardCounters/");
         }
 
         Instance = this;
@@ -85,9 +126,8 @@ public class GameBoard : NetworkBehaviour
     }
 
     #endregion
-
+   
     #region Board Intearction
-
 
     //This function takes in two tiles and switches their positions
     public async void Select(Tile tile)
@@ -154,8 +194,6 @@ public class GameBoard : NetworkBehaviour
         return false;
     }
 
-
-
     //If tiles are able to be matched, "pop" them and calculate a score for the users
     public async void pop()
     {
@@ -178,8 +216,9 @@ public class GameBoard : NetworkBehaviour
 
                 _audioSource.PlayOneShot(selectSound);
 
-                if (isServer && isClient)
+                if (isClient && isServer)
                 {
+                    
                     if (matchedTiles.Count == 4)
                     {
                         ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count * 2;
@@ -193,11 +232,11 @@ public class GameBoard : NetworkBehaviour
                     {
                         ScoreSystem.instance.score += tile.counter.value * matchedTiles.Count;
                     }
+                 
 
+                } else if(isClient && isClientOnly) { 
 
-                }
-                else
-                {
+                  
                     if (matchedTiles.Count == 4)
                     {
                         ScoreSystem.instance.opponentScore += tile.counter.value * matchedTiles.Count * 2;
@@ -239,29 +278,170 @@ public class GameBoard : NetworkBehaviour
 
     #endregion
 
-    #region Score Update
+    #region Score Update and User Data Update
 
+    public void onLogin(LoginResult playfabID)
+    {
+        playFABID = playfabID.PlayFabId;
+    }
 
     //Updates user server and client score on both player screens
     [Server]
     public void serverUpdateBoardScore()
     {
-        rpcUpdateBoardScore();
+       
+            rpcUpdateServerScore();
+        
+    }
+    
+    [ClientRpc]
+    public void rpcUpdateServerScore()
+    {
+        //Updates server score on client
+        ScoreSystem.instance.scoreText.SetText($"Score = {ScoreSystem.instance._score}");
+
+    }
+    
+    [Client]
+    public void clientUpdateBoardScore()
+    {
+       rpcUpdateClientScore(ScoreSystem.instance.opponentScore);
+    }
+    
+    [Command(requiresAuthority = false)]
+    public void rpcUpdateClientScore(int score)
+    {
+        int test = +score;
+        ScoreSystem.instance.opponentScoreText.text = "Score = " + (test);
+
+    }
+    //
+
+
+    //Gets country data for both client and server
+    [Client]
+    public void getPlayerCCountry()
+    {
+
+        GetUserDataRequest request = new GetUserDataRequest()
+        {
+
+            PlayFabId = playFABID,
+            Keys = null
+        };
+
+        PlayFabClientAPI.GetUserData(request,
+
+
+
+        result => {
+
+            foreach (var data in result.Data)
+            {
+                playerCountryInGameC = data.Value.Value;
+
+            }
+
+
+
+        }, error => {
+
+
+            Debug.LogError(error.ErrorMessage);
+
+        });
+
+    }
+
+    [Server]
+    public void getPlayerSCountry()
+    {
+
+        GetUserDataRequest request = new GetUserDataRequest()
+        {
+
+            PlayFabId = playFABID,
+            Keys = null
+        };
+
+        PlayFabClientAPI.GetUserData(request,
+
+
+
+        result => {
+
+            foreach (var data in result.Data)
+            {
+                playerCountryInGameS = data.Value.Value;
+
+            }
+
+
+
+        }, error => {
+
+
+            Debug.LogError(error.ErrorMessage);
+
+        });
+
+    }
+    //
+   
+    //Gets userNames for both client and server
+    [Client]
+    public void getUname(GetAccountInfoResult result)
+    {
+        tes1t = result.AccountInfo.Username;
+    }
+
+    [Server]
+    public void getSUname(GetAccountInfoResult result)
+    {
+        tes2t = result.AccountInfo.Username;
+    }
+    //
+ 
+
+    [Client]
+    public void clientUpdateUname()
+    {
+        rpcUpdateClientUName(tes1t,playerCountryInGameC);
+    }
+    [Command(requiresAuthority = false)]
+    public void rpcUpdateClientUName(string uName, string country)
+    {
+        //Updates client username and country on server
+        playerC.SetText(uName);
+        playerCCountry.SetText(country);
+    }
+
+    [Server]
+    public void serverUpdateUserName()
+    {
+        rpcUpdateServeUName();
+    }
+    [ClientRpc]
+    public void rpcUpdateServeUName()
+    {
+        //Updates server username and country for the client
+        if (isServer && isClient)
+        {
+            playerS.SetText(tes2t);
+            playerSCountry.SetText(playerCountryInGameS);
+        }
+        else
+        {
+            playerC.SetText(tes1t);
+            playerCCountry.SetText(playerCountryInGameC);
+        }
     }
 
 
-
-    //Sends client score to server, and server score to client
-    [ClientRpc]
-    public void rpcUpdateBoardScore()
+    private void OnLoginFailure(PlayFabError error)
     {
-        ScoreSystem.instance.opponentScoreText.SetText($"Score = {ScoreSystem.instance._opponentScore}");
 
-        //Updates server score on client
-        ScoreSystem.instance.scoreText.SetText($"Score = {ScoreSystem.instance._score}");
     }
 
     #endregion
-
-}
 
