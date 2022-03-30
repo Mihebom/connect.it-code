@@ -9,6 +9,8 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+//Written by Matthew Ihebom and Ibrahim Khan
+
 public class ChatBehaviour : NetworkBehaviour
 {
     [SerializeField] private GameObject Chat_UI = null;

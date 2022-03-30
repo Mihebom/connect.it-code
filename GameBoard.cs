@@ -12,6 +12,7 @@ using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
 
+//Written by Matthew Ihebom and Alexandru Ursache 
 
 public class GameBoard : NetworkBehaviour
 {
@@ -444,4 +445,21 @@ public class GameBoard : NetworkBehaviour
     }
 
     #endregion
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

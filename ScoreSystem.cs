@@ -3,13 +3,15 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 
+//Written by Matthew Ihebom
+
 public sealed class ScoreSystem : NetworkBehaviour
 {
     public static ScoreSystem instance { get; private set; }
 
     [SyncVar] public int _score;
 
-    [SyncVar] public int _opponentScore;
+    public int _opponentScore;
 
     public int score
     {

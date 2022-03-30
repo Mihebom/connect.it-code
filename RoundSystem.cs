@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using Mirror;
 
+//Written by Matthew Ihebom and Raeesa 
 
 public class RoundSystem : NetworkBehaviour
 {
@@ -102,7 +103,7 @@ public class RoundSystem : NetworkBehaviour
 
             facts[2] = "About 75% of the total population uses social media on a regular basis.";
 
-            facts[3] = "Lagos is the largest city, but itâ€™s not the capital.";
+            facts[3] = "Lagos is the largest city, but it’s not the capital.";
 
             facts[4] = "The movie industry is known as Nollywood.";
 
@@ -118,15 +119,15 @@ public class RoundSystem : NetworkBehaviour
         {
             facts[0] = "Pakistan is the world's first Islamic country to attain nuclear power.";
 
-            facts[1] = "Sylvester Stalloneâ€™s Rambo III was shot in Pakistan.";
+            facts[1] = "Sylvester Stallone’s Rambo III was shot in Pakistan.";
 
             facts[2] = "Lassi and black tea with milk and sugar are the most common drinks.";
 
-            facts[3] = "Pakistan is the worldâ€™s fifth most populated country - after China, India, the USA and Indonesia.";
+            facts[3] = "Pakistan is the world’s fifth most populated country - after China, India, the USA and Indonesia.";
 
-            facts[4] = "Pakistan has the only fertile desert in the world â€“ the Tharparkar desert â€“ located in Sindh province.";
+            facts[4] = "Pakistan has the only fertile desert in the world – the Tharparkar desert – located in Sindh province.";
 
-            facts[5] = "Around 40% - almost half! - of the worldâ€™s footballs are hand-sewn in Sialkot in Pakistan.";
+            facts[5] = "Around 40% - almost half! - of the world’s footballs are hand-sewn in Sialkot in Pakistan.";
 
             facts[6] = "In Pakistan, cars drive on the left side of the road as they do in the UK and Australia or neighbouring country India.";
         }
@@ -222,19 +223,19 @@ public class RoundSystem : NetworkBehaviour
                 winningScore += ScoreSystem.instance.score; //updates current winning score for host 
                 if (this.gameObject.scene.name == "FranceBoard")
                 {
-                    instance.SubmitScore("France", winningScore);
+                    PlayFabManager.Instance.SubmitScore("France", winningScore);
                 } 
                 else if(this.gameObject.scene.name == "NigeriaBoard")
                 {
-                    instance.SubmitScore("Nigeria", winningScore);
+                    PlayFabManager.Instance.SubmitScore("Nigeria", winningScore);
                 }
                 else if (this.gameObject.scene.name == "PakistanBoard")
                 {
-                    instance.SubmitScore("Pakistan", winningScore);
+                    PlayFabManager.Instance.SubmitScore("Pakistan", winningScore);
                 }
                 else if (this.gameObject.scene.name == "ChinaBoard")
                 {
-                    instance.SubmitScore("China", winningScore);
+                    PlayFabManager.Instance.SubmitScore("China", winningScore);
                 }
 
                 
@@ -246,8 +247,7 @@ public class RoundSystem : NetworkBehaviour
                 winnerorloser.SetText("You lose.");
             }
 
-            instance.awardPlayer();
-
+            PlayFabManager.Instance.awardPlayer();
         }
         else if (isServer && isClient && remainingSeconds <= 0 && madeTurnServer == 8)
         {
@@ -319,19 +319,19 @@ public class RoundSystem : NetworkBehaviour
                 winningScore += ScoreSystem.instance.opponentScore; //updates current winning score for client
                 if (this.gameObject.scene.name == "FranceBoard")
                 {
-                    instance.SubmitScore("France", winningScore);
+                    PlayFabManager.Instance.SubmitScore("France", winningScore);
                 }
                 else if (this.gameObject.scene.name == "NigeriaBoard")
                 {
-                    instance.SubmitScore("Nigeria", winningScore);
+                    PlayFabManager.Instance.SubmitScore("Nigeria", winningScore);
                 }
                 else if (this.gameObject.scene.name == "PakistanBoard")
                 {
-                    instance.SubmitScore("Pakistan", winningScore);
+                    PlayFabManager.Instance.SubmitScore("Pakistan", winningScore);
                 }
                 else if (this.gameObject.scene.name == "ChinaBoard")
                 {
-                    instance.SubmitScore("China", winningScore);
+                    PlayFabManager.Instance.SubmitScore("China", winningScore);
                 }
                 winnerorloser.SetText("You Win!!");
                 
@@ -343,8 +343,8 @@ public class RoundSystem : NetworkBehaviour
                 
             }
 
-            instance.awardPlayer();
-
+            PlayFabManager.Instance.awardPlayer();
+            
         }
         else if (isClientOnly && remainingSeconds <= 0 && madeTurnClient == 9 && madeTurnServer == 8)
         {
@@ -403,10 +403,6 @@ public class RoundSystem : NetworkBehaviour
     }
 
 }
-
-
-
-
 
 
 

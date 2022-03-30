@@ -8,6 +8,8 @@ using System;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+//Written by Matthew Ihebom
+
 public class ItemInfo : MonoBehaviour
 {
     public TextMeshProUGUI itemdisplayName;

@@ -7,11 +7,13 @@ using System.Collections.Concurrent;
 using System;
 using UnityEngine.SceneManagement;
 using TMPro;
-public class leaderboardInfo : MonoBehaviour
+
+//Written by Matthew Ihebom
+
+public class LeaderboardInfo : MonoBehaviour
 {
 
-    public Text displaynameTxt;
-    public Text scoreTxt;
-  
-    
+    public TextMeshProUGUI displaynameTxt;
+    public TextMeshProUGUI scoreTxt;
+ 
 }

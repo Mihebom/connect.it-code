@@ -6,6 +6,8 @@ using System.Net;
 using UnityEngine.UI;
 using TMPro;
 
+//Written by Matthew Ihebom
+
 public class HostScript : MonoBehaviour
 {
 

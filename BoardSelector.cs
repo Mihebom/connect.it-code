@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Written by Matthew Ihebom
+
 public class BoardSelector : MonoBehaviour
 {
     public void franceBoard()
@@ -60,4 +62,3 @@ public class BoardSelector : MonoBehaviour
         SceneManager.LoadScene("NigeriaMatchMaking");
     }
 }
-

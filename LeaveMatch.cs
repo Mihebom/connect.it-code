@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
+//Written by Matthew Ihebom
+
 public class LeaveMatch : NetworkBehaviour
 {
    

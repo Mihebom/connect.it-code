@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System;
-
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Text.RegularExpressions;
+
+//Written by Matthew Ihebom and Raeesa 
 
 public class PlayFabManager : MonoBehaviour
 {
@@ -43,10 +44,8 @@ public class PlayFabManager : MonoBehaviour
     public TextMeshProUGUI itemPrice;
     public TextMeshProUGUI inGameCountryDisplay;
     public TextMeshProUGUI popUpMessage;
-    public TextMeshProUGUI awardText;
     public Text backEndBarValue;
     public GameObject itemHolder;
-    public Button test;
     public Image itemInfoIMG;
     public Sprite[] itemIMG;
 
@@ -89,12 +88,11 @@ public class PlayFabManager : MonoBehaviour
         getCatalog();
         getUserData();
         ownedItemCheck();
+
     }
 
     #region Login/Register
-
-    //Logs user into the database
-
+    //Method writtern by Chief 
     string Encrypt(string pass)
     {
         System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
@@ -107,6 +105,8 @@ public class PlayFabManager : MonoBehaviour
         }
         return s.ToString();
     }
+
+    //Logs user into the database
     private void OnLoginSuccess(LoginResult result)
     {
 
@@ -201,8 +201,6 @@ public class PlayFabManager : MonoBehaviour
 
     #endregion
 
-
-    
     #region Country Selection
 
     //Sets users country based on their input from the dropdown menu
@@ -274,9 +272,7 @@ public class PlayFabManager : MonoBehaviour
 
     #endregion
 
-    
     #region Leaderboard
-
 
     public void changeLeaderBoardCountry()
     {
@@ -342,8 +338,6 @@ public class PlayFabManager : MonoBehaviour
 
     #endregion
 
-
-    //Written by Matthew Ihebom
     #region Virtual Currencies
 
     public TextMeshProUGUI goldBarsValueText; //variable to display the text of gold bars on UI
@@ -763,6 +757,7 @@ public class PlayFabManager : MonoBehaviour
 
     #region GoldBar Award System
 
+
     public void awardPlayer()
     {
 
@@ -773,8 +768,10 @@ public class PlayFabManager : MonoBehaviour
             {
                 
                 awardAmount += 10;
-                
+
             }
+
+           
         }
       
 
@@ -793,8 +790,8 @@ public class PlayFabManager : MonoBehaviour
         {
             Amount = awardAmount,
             VirtualCurrency = "GB",
-           
             
+
         };
 
         PlayFabClientAPI.AddUserVirtualCurrency(request, 
@@ -802,9 +799,8 @@ public class PlayFabManager : MonoBehaviour
             
         
         result => {
-
-            awardText.SetText(awardAmount.ToString());
-            Debug.Log(awardAmount.ToString());
+            popUpMessage.gameObject.SetActive(true);
+            popUpMessage.SetText("You won " + awardAmount.ToString() + " Gold Bars!");     
         }, 
         
         error => {
@@ -815,7 +811,6 @@ public class PlayFabManager : MonoBehaviour
 
        
     }
-
 
     #endregion
 }

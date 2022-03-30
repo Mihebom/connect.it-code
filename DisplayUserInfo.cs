@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Mirror;
 
+//Written by Matthew Ihebom
+
 public class DisplayUserInfo : MonoBehaviour
 {
 
